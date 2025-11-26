@@ -1,0 +1,18 @@
+GET http://localhost:3000/api/health
+
+###
+
+GET http://localhost:3000/api/courses
+
+###
+
+POST http://localhost:3000/api/courses
+Content-Type: application/json
+
+{
+  "name": "Introduction to Programming"
+}
+
+###
+
+GET http://localhost:3000/api/courses/1
