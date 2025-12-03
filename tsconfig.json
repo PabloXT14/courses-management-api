@@ -12,6 +12,8 @@
     ],
     "module": "nodenext",
     "target": "es2024",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

@@ -1,6 +1,10 @@
 import fastify from "fastify";
 import crypto from "node:crypto";
 
+import { db } from "./database/client.ts";
+import { courses } from './database/schema.ts'
+import { eq } from "drizzle-orm";
+
 const server = fastify({
   logger: {
     transport: {
@@ -15,39 +19,34 @@ const server = fastify({
 
 const PORT = 3000;
 
-const courses = [
-  { id: "1", name: "Node.js Basics" },
-  { id: "2", name: "Advanced JavaScript" },
-  { id: "3", name: "MongoDB Basics" },
-]
-
 server.get("/api/health", async () => {
   return { status: "ok" };
 });
 
 server.get("/api/courses", async (request, reply) => {
-  return reply.send({ courses });
+  const result = await db.select({
+    id: courses.id,
+    title: courses.title
+  }).from(courses);
+
+  return reply.send({ courses: result });
 })
 
 server.post("/api/courses", async (request, reply) => {
-  type Body = {
-    name: string;
+  type Body = typeof courses.$inferInsert
+
+  const { title, description } = request.body as Body;
+
+  if (!title) {
+    return reply.status(400).send({ message: "Title is required" });
   }
 
-  const { name } = request.body as Body;
+  const result = await db.insert(courses).values({
+    title,
+    description
+  }).returning()
 
-  if (!name) {
-    return reply.status(400).send({ message: "Name is required" });
-  }
-
-  const newCourse = {
-    id: crypto.randomUUID(),
-    name
-  }
-
-  courses.push(newCourse);
-
-  return reply.status(201).send({ id: newCourse.id });
+  return reply.status(201).send({ id: result[0].id });
 })
 
 server.get("/api/courses/:id", async (request, reply) => {
@@ -57,13 +56,13 @@ server.get("/api/courses/:id", async (request, reply) => {
 
   const { id } = request.params as Params;
 
-  const course = courses.find(course => course.id === id);
+  const result = await db.select().from(courses).where(eq(courses.id, id))
 
-  if (!course) {
+  if (result.length <= 0) {
     return reply.status(404).send({ message: "Course not found" });
   }
 
-  return reply.send({ course });
+  return reply.send({ course: result[0] });
 })
 
 server.listen({ port: PORT }).then(() => {

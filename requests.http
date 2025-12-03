@@ -10,9 +10,10 @@ POST http://localhost:3000/api/courses
 Content-Type: application/json
 
 {
-  "name": "Introduction to Programming"
+  "title": "Introduction to Programming",
+  "description": "Best introduction to programming"
 }
 
 ###
 
-GET http://localhost:3000/api/courses/1
+GET http://localhost:3000/api/courses/6f970be4-eb21-4951-ae47-5f51f1a3d2d5
