@@ -2,6 +2,7 @@ import fastify from "fastify";
 import { validatorCompiler, serializerCompiler, type ZodTypeProvider, jsonSchemaTransform } from 'fastify-type-provider-zod'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
+import scalarAPIReference from '@scalar/fastify-api-reference'
 
 import { createCourseRoute } from "./routes/create-course.ts";
 import { getCoursesRoute } from "./routes/get-courses.ts";
@@ -28,20 +29,34 @@ server.setValidatorCompiler(validatorCompiler) // Valida os dados de entrada
 server.setSerializerCompiler(serializerCompiler) // Converte/serializa os dados de saída
 
 // Documentação
-server.register(fastifySwagger, {
-  openapi: {
-    info: {
-      title: 'Courses Management API',
-      description: 'API to manage courses',
-      version: '1.0.0'
-    }
-  },
-  transform: jsonSchemaTransform
-})
+if (process.env.NODE_ENV === 'development') {
+  // Configuração da documentação no formato OpenAPI (JSON com um padrão de documentação)
+  server.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: 'Courses Management API',
+        description: 'API to manage courses',
+        version: '1.0.0'
+      }
+    },
+    transform: jsonSchemaTransform
+  })
 
-server.register(fastifySwaggerUi, {
-  routePrefix: '/docs'
-})
+  // UI Swagger da documentação
+  // server.register(fastifySwaggerUi, {
+  //   routePrefix: '/docs'
+  // })
+
+  // UI Scalar da documentação
+  server.register(scalarAPIReference, {
+    routePrefix: '/docs',
+    // configuration: {
+    //   theme: 'kepler'// tema da documentação
+    // }
+  })
+}
+
+
 
 /* ROUTES */
 
