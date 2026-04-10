@@ -44,8 +44,8 @@ export const getCoursesRoute: FastifyPluginAsyncZod = async (server) => {
           and(...conditions)
         )
         .orderBy(asc(courses[orderBy]))
-        .limit(2)
-        .offset((page - 1) * 2),
+        .limit(10)
+        .offset((page - 1) * 10),
       db.$count(courses, and(...conditions))
     ]
     )
