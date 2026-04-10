@@ -15,6 +15,20 @@
       "when": 1764719572207,
       "tag": "0001_demonic_skrulls",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775851651170,
+      "tag": "0002_exotic_dagger",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1775851833218,
+      "tag": "0003_shocking_scalphunter",
+      "breakpoints": true
     }
   ]
 }
