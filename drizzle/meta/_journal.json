@@ -29,6 +29,13 @@
       "when": 1775851833218,
       "tag": "0003_shocking_scalphunter",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776114077283,
+      "tag": "0004_aspiring_shooting_star",
+      "breakpoints": true
     }
   ]
 }
